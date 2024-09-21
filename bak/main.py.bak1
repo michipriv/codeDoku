@@ -1,0 +1,72 @@
+# Filename: main.py
+
+import sys
+import os
+from modules.overview import generate_overview
+from modules.save import save_as_md, save_as_html
+from modules.help import print_help
+
+
+def main():
+    project_path = "./"
+    target_dir = "./"
+    md_output_file = "docu.MD"
+    html_output_file = "docu.html"
+
+    # Zeige immer den Hinweis auf die Hilfe an
+    print("Für Hilfe verwenden Sie die Option -h")
+
+    # Prüfe auf verschiedene Flags
+    if "-h" in sys.argv:
+        print_help()
+        return
+
+    if "-z" in sys.argv:
+        try:
+            target_index = sys.argv.index("-z") + 1
+            target_dir = sys.argv[target_index]
+            if not os.path.exists(target_dir):
+                os.makedirs(target_dir)
+            target_dir = os.path.join(target_dir, "doc")
+            if not os.path.exists(target_dir):
+                os.makedirs(target_dir)
+            md_output_file = os.path.join(target_dir, "docu.MD")
+            html_output_file = os.path.join(target_dir, "docu.html")
+        except (IndexError, FileNotFoundError):
+            print("Fehler: Ungültiges Zielverzeichnis. Nutzen Sie -h für Hilfe.")
+            return
+
+    # Generiere die Übersicht als Dictionary
+    overview = generate_overview(project_path)
+
+    if "-p" in sys.argv:
+        # Ausgabe in menschenlesbarer Form und Markdown speichern
+        print("Ausgabe in menschenlesbarer Form:")
+        for file_path, classes in overview.items():
+            print(f"Datei: {file_path}")
+            for cls in classes:
+                print(f"  Klasse: {cls['class']}")
+                if cls["docstring"]:
+                    print(f"    Docstring: {cls['docstring']}")
+                for method in cls["methods"]:
+                    params_str = ", ".join(method["params"])
+                    print(f"    Methode: {method['method']}({params_str})")
+                    if method["docstring"]:
+                        print(f"      Docstring: {method['docstring']}")
+            print()
+
+        save_as_md(overview, md_output_file)
+        print(f"Die Markdown-Datei wurde in '{md_output_file}' gespeichert.")
+
+    elif "-h" in sys.argv:
+        save_as_html(overview, html_output_file)
+        print(f"Die HTML-Datei wurde in '{html_output_file}' gespeichert.")
+
+    else:
+        save_as_md(overview, md_output_file)
+        print(f"Die Markdown-Datei wurde in '{md_output_file}' gespeichert.")
+
+
+if __name__ == "__main__":
+    main()
+# EOF
