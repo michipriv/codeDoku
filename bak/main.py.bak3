@@ -3,7 +3,6 @@
 Main program to generate and save a project overview and file list.
 
 Imports:
-    - os: Provides file system operations.
     - OverviewGenerator (modules.generator): Class to generate a project overview.
     - FileListSaver (modules.file_list_saver): Class to save the list of Python files.
     - OverviewSaver (modules.overview_saver): Class to save the project overview.
@@ -13,7 +12,7 @@ Usage:
     python main.py [-p] [-h] [-z ZIELVERZEICHNIS]
 """
 
-import os  # Füge den Import von os hinzu
+import os
 from modules.generator import OverviewGenerator
 from modules.file_list_saver import FileListSaver
 from modules.overview_saver import OverviewSaver
@@ -60,8 +59,10 @@ def main():
 
     # Generiere die Liste der Dateien und die Übersicht
     generator = OverviewGenerator(args.project_path)
-    file_list = generator.scan_directory()
-    overview = generator.generate_overview(file_list)
+    file_list = generator.scan_directory()  # Verwende die Liste der Dateien
+    overview = generator.generate_overview(
+        file_list
+    )  # Nutze file_list zur Dokumentation
 
     # Speichere die Liste der Dateien
     file_saver = FileListSaver(file_list)
@@ -69,7 +70,7 @@ def main():
     file_saver.save_file_list_as_html(f"{doc_dir}/file_list.html")
 
     # Speichere die Übersicht der Klassen und Methoden
-    overview_saver = OverviewSaver(overview, file_list)
+    overview_saver = OverviewSaver(overview)
     overview_saver.save_overview_as_md(f"{doc_dir}/overview.md")
     overview_saver.save_overview_as_html(f"{doc_dir}/overview.html")
 

@@ -1,46 +1,63 @@
 # Filename: main.py
 
-from modules.overview import generate_overview, save_as_md, save_as_html, print_help
-import sys
+from modules.generator import OverviewGenerator
+from modules.file_list_saver import FileListSaver
+from modules.overview_saver import OverviewSaver
+from modules.args import ArgumentParser
+
+
+def create_doc_directory(target_dir):
+    """
+    Ensures the 'doc' directory exists in the target directory.
+
+    Args:
+        target_dir (str): The path to the target directory where 'doc' should be created.
+
+    Returns:
+        str: The path to the 'doc' directory.
+    """
+    doc_dir = os.path.join(target_dir, "doc")
+    if not os.path.exists(doc_dir):
+        os.makedirs(doc_dir)
+    return doc_dir
 
 
 def main():
-    project_path = "./"
-    md_output_file = "docu.MD"
-    html_output_file = "docu.html"
+    """
+    Main function to handle project overview generation and output saving.
 
-    print("Für Hilfe verwenden Sie die Option -?")
+    This function does the following:
+    1. Parses command line arguments to get the project path and target directory.
+    2. Generates the list of files and the project overview.
+    3. Saves the list of files and the overview in both Markdown and HTML formats.
 
-    overview = generate_overview(project_path)
+    Args:
+        None
 
-    if "-?" in sys.argv:
-        print_help()
-    elif "-p" in sys.argv:
-        print("Ausgabe in menschenlesbarer Form:")
-        for file_path, classes in overview.items():
-            print(f"Datei: {file_path}")
-            for cls in classes:
-                print(f"  Klasse: {cls['class']}")
-                if cls["docstring"]:
-                    print(f"    Docstring: {cls['docstring']}")
-                for method in cls["methods"]:
-                    params_str = ", ".join(method["params"])
-                    print(f"    Methode: {method['method']}({params_str})")
-                    if method["docstring"]:
-                        print(f"      Docstring: {method['docstring']}")
-            print()
+    Returns:
+        None
+    """
+    arg_parser = ArgumentParser()
+    args = arg_parser.parse_arguments()
 
-        save_as_md(overview, md_output_file)
-        print(f"Die Markdown-Datei '{md_output_file}' wurde erzeugt.")
+    # Erstelle das doc-Verzeichnis im Zielverzeichnis
+    doc_dir = create_doc_directory(args.target_dir)
 
-    elif "-h" in sys.argv:
-        save_as_html(overview, html_output_file)
-        print(f"Die HTML-Datei '{html_output_file}' wurde erzeugt.")
-    else:
-        save_as_md(overview, md_output_file)
-        print(f"Die Markdown-Datei '{md_output_file}' wurde erzeugt.")
+    # Generiere die Liste der Dateien und die Übersicht
+    generator = OverviewGenerator(args.project_path)
+    file_list = generator.scan_directory()
+    overview = generator.generate_overview(file_list)
+
+    # Speichere die Liste der Dateien
+    file_saver = FileListSaver(file_list)
+    file_saver.save_file_list_as_md(f"{doc_dir}/file_list.md")
+    file_saver.save_file_list_as_html(f"{doc_dir}/file_list.html")
+
+    # Speichere die Übersicht der Klassen und Methoden
+    overview_saver = OverviewSaver(overview, file_list)
+    overview_saver.save_overview_as_md(f"{doc_dir}/overview.md")
+    overview_saver.save_overview_as_html(f"{doc_dir}/overview.html")
 
 
 if __name__ == "__main__":
     main()
-# EOF

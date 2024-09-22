@@ -74,15 +74,13 @@ class OverviewGenerator:
         for node in ast.walk(tree):
             if isinstance(node, ast.ClassDef):  # Suche nach Klassen
                 methods = []
-                class_doc = ast.get_docstring(node)  # Hole den Docstring der Klasse
+                class_doc = ast.get_docstring(node)
                 for n in node.body:
                     if isinstance(
                         n, ast.FunctionDef
                     ):  # Suche nach Methoden in der Klasse
                         params = [arg.arg for arg in n.args.args]
-                        method_doc = ast.get_docstring(
-                            n
-                        )  # Hole den Docstring der Methode
+                        method_doc = ast.get_docstring(n)
                         methods.append(
                             {
                                 "method": n.name,
@@ -98,7 +96,7 @@ class OverviewGenerator:
                 node, ast.FunctionDef
             ):  # Suche nach Funktionen auf Modulebene
                 params = [arg.arg for arg in node.args.args]
-                func_doc = ast.get_docstring(node)  # Hole den Docstring der Funktion
+                func_doc = ast.get_docstring(node)
                 result.append(
                     {"function": node.name, "params": params, "docstring": func_doc}
                 )

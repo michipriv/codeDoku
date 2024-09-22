@@ -1,13 +1,33 @@
-# Filename: modules/save.py
+#Filename: modules/save.py
+"""
+Module to save the overview of classes, methods, parameters, and docstrings in Markdown and HTML formats.
 
+Functions:
+    - save_as_md(overview, output_file): Saves the overview as a readable Markdown file.
+    - save_as_html(overview, output_file): Saves the overview as an HTML file.
+
+Usage:
+    save_as_md(overview, output_file)
+    save_as_html(overview, output_file)
+
+Parameters:
+    - overview (dict): A dictionary containing class, method, parameter, and docstring information for each file.
+    - output_file (str): The path to the output file where the overview will be saved.
+"""
 
 def save_as_md(overview, output_file):
     """
-    Speichert die Übersicht in einer menschenlesbaren Markdown-Datei.
+    Saves the overview as a human-readable Markdown file.
 
-    Parameters:
-        overview (dict): Die Übersicht der Klassen, Methoden und Parameter.
-        output_file (str): Der Pfad zur Ausgabedatei.
+    This function formats the overview of classes, methods, parameters, and docstrings 
+    and writes it to a Markdown file. The file contains hierarchical headers for files, classes, and methods.
+
+    Args:
+        overview (dict): The overview of classes, methods, and parameters. Each key is a file path, and the value is a list of class information.
+        output_file (str): The path to the Markdown file where the overview will be saved.
+
+    Returns:
+        None
     """
     with open(output_file, "w") as f:
         for file_path, classes in overview.items():
@@ -26,11 +46,17 @@ def save_as_md(overview, output_file):
 
 def save_as_html(overview, output_file):
     """
-    Speichert die Übersicht in einer HTML-Datei.
+    Saves the overview as an HTML file.
 
-    Parameters:
-        overview (dict): Die Übersicht der Klassen, Methoden und Parameter.
-        output_file (str): Der Pfad zur Ausgabedatei.
+    This function formats the overview of classes, methods, parameters, and docstrings 
+    and writes it to an HTML file. The output is structured with headers for files, classes, and methods.
+
+    Args:
+        overview (dict): The overview of classes, methods, and parameters. Each key is a file path, and the value is a list of class information.
+        output_file (str): The path to the HTML file where the overview will be saved.
+
+    Returns:
+        None
     """
     with open(output_file, "w") as f:
         f.write("<html><body>\n")
@@ -48,5 +74,4 @@ def save_as_html(overview, output_file):
                         f.write(f"<p>Docstring: {method['docstring']}</p>\n")
         f.write("</body></html>")
 
-
-# EOF
+#EOF
