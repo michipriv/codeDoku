@@ -32,10 +32,7 @@ class OverviewSaver:
             None
         """
         with open(output_file, "w") as f:
-            # Schreibe die dynamische Hilfetext (aus print_help) an den Anfang
-            f.write("# Kommandozeilen-Hilfe\n\n")
-            f.write(print_help(self.prog_name))
-            f.write("\n")
+          
 
             f.write("# Übersicht der gescannten Dateien\n\n")
 
@@ -89,11 +86,7 @@ class OverviewSaver:
             None
         """
         with open(output_file, "w") as f:
-            # Schreibe die dynamische Hilfetext (aus print_help) an den Anfang
-            f.write("<html><body>\n")
-            f.write("<h1>Kommandozeilen-Hilfe</h1>\n<pre>\n")
-            f.write(print_help(self.prog_name))
-            f.write("</pre>\n")
+        
 
             f.write("<h1>Übersicht der gescannten Dateien</h1>\n<ul>\n")
 
@@ -150,8 +143,7 @@ class OverviewSaver:
         """
         # Bereite das JSON-Objekt vor, das auch die Kommandozeilenparameter enthält
         output_data = {
-            "command_line_help": print_help(self.prog_name),
-            "command_line_arguments": {
+                "command_line_arguments": {
                 "project_path": self.args.project_path,
                 "target_dir": self.args.target_dir,
             },

@@ -43,10 +43,7 @@ class FileListSaver:
             None
         """
         with open(output_file, "w") as f:
-            # Schreibe die dynamische Hilfetext (aus print_help) an den Anfang
-            f.write("# Kommandozeilen-Hilfe\n\n")
-            f.write(print_help(self.prog_name))
-            f.write("\n")
+           
 
             f.write("# Übersicht der gescannten Dateien\n\n")
             for file in self.file_list:
@@ -63,11 +60,7 @@ class FileListSaver:
             None
         """
         with open(output_file, "w") as f:
-            # Schreibe die dynamische Hilfetext (aus print_help) an den Anfang
-            f.write("<html><body>\n")
-            f.write("<h1>Kommandozeilen-Hilfe</h1>\n<pre>\n")
-            f.write(print_help(self.prog_name))
-            f.write("</pre>\n")
+           
 
             f.write("<h1>Übersicht der gescannten Dateien</h1>\n<ul>\n")
             for file in self.file_list:
