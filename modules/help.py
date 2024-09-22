@@ -3,14 +3,14 @@
 print_help function to display the help message for the program.
 
 Functions:
-    - print_help(): Displays a formatted help message that explains the usage and available options for the program.
+    - print_help(prog_name): Displays a formatted help message that explains the usage and available options for the given program.
 
 Usage:
-    Call print_help() to display the help message, typically when the user invokes the -h option.
+    Call print_help() with the specific program name to display the help message.
 """
 
 
-def print_help():
+def print_help(prog_name):
     """
     Displays a help message describing the command-line options for the program.
 
@@ -24,14 +24,17 @@ def print_help():
         - -h: Displays the help message and exits the program.
         - -z: Specifies the output directory for saving the generated files (Markdown and HTML).
 
+    Args:
+        prog_name (str): The name of the program for which the help is being generated.
+
     Example usage:
-        - python main.py -p
-        - python main.py -h
-        - python main.py -p -z /Path/to/TargetDirectory
+        - python {prog_name} -p
+        - python {prog_name} -h
+        - python {prog_name} -p -z /Path/to/TargetDirectory
     """
-    help_text = """
+    help_text = f"""
     Nutzung:
-      python main.py [-p] [-h] [-z ZIELVERZEICHNIS]
+      python {prog_name} [-p] [-h] [-z ZIELVERZEICHNIS]
     
     Optionen:
       -p    Generiert eine Projektübersicht (Klassen, Methoden, Docstrings) und speichert diese in Markdown und HTML.
@@ -39,11 +42,11 @@ def print_help():
       -z    Spezifiziert das Zielverzeichnis für die gespeicherten Dateien (Markdown und HTML). Standard ist das aktuelle Verzeichnis.
     
     Beispielaufrufe:
-      python main.py -p
-      python main.py -p -z /Pfad/zum/Zielverzeichnis
-      python main.py -h
+      python {prog_name} -p
+      python {prog_name} -p -z /Pfad/zum/Zielverzeichnis
+      python {prog_name} -h
     """
-    print(help_text)
+    return help_text
 
 
 # EOF

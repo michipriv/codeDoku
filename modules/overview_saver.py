@@ -5,18 +5,20 @@ from modules.help import print_help
 
 
 class OverviewSaver:
-    def __init__(self, overview, file_list, args):
+    def __init__(self, overview, file_list, args, prog_name):
         """
-        Initializes the OverviewSaver with the project overview data, the list of all files, and command-line arguments.
+        Initializes the OverviewSaver with the project overview data, the list of all files, and program name.
 
         Args:
             overview (dict): The overview of classes, methods, and functions. Each key is a file path, and the value is a list of class and function information.
             file_list (list): The list of all Python files to ensure all are documented.
             args (ArgumentParser): Parsed command-line arguments (e.g., project_path, target_dir).
+            prog_name (str): The name of the program being executed.
         """
         self.overview = overview
         self.file_list = file_list
         self.args = args
+        self.prog_name = prog_name
 
     def save_overview_as_md(self, output_file):
         """
@@ -30,9 +32,9 @@ class OverviewSaver:
             None
         """
         with open(output_file, "w") as f:
-            # Schreibe die Hilfetext (aus print_help) an den Anfang
+            # Schreibe die dynamische Hilfetext (aus print_help) an den Anfang
             f.write("# Kommandozeilen-Hilfe\n\n")
-            f.write(print_help.__doc__)
+            f.write(print_help(self.prog_name))
             f.write("\n")
 
             f.write("# Übersicht der gescannten Dateien\n\n")
@@ -87,10 +89,10 @@ class OverviewSaver:
             None
         """
         with open(output_file, "w") as f:
-            # Schreibe die Hilfetext (aus print_help) an den Anfang
+            # Schreibe die dynamische Hilfetext (aus print_help) an den Anfang
             f.write("<html><body>\n")
             f.write("<h1>Kommandozeilen-Hilfe</h1>\n<pre>\n")
-            f.write(print_help.__doc__)
+            f.write(print_help(self.prog_name))
             f.write("</pre>\n")
 
             f.write("<h1>Übersicht der gescannten Dateien</h1>\n<ul>\n")
@@ -148,7 +150,7 @@ class OverviewSaver:
         """
         # Bereite das JSON-Objekt vor, das auch die Kommandozeilenparameter enthält
         output_data = {
-            "command_line_help": print_help.__doc__,
+            "command_line_help": print_help(self.prog_name),
             "command_line_arguments": {
                 "project_path": self.args.project_path,
                 "target_dir": self.args.target_dir,

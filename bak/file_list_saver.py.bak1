@@ -14,6 +14,8 @@ Attributes:
     - args (ArgumentParser): The parsed command-line arguments to include in the output files.
 """
 
+from modules.help import print_help
+
 
 class FileListSaver:
     def __init__(self, file_list, args):
@@ -38,10 +40,10 @@ class FileListSaver:
             None
         """
         with open(output_file, "w") as f:
-            # Schreibe die Kommandozeilenparameter an den Anfang
-            f.write("# Kommandozeilenargumente\n")
-            f.write(f"- Projektpfad: {self.args.project_path}\n")
-            f.write(f"- Zielverzeichnis: {self.args.target_dir}\n\n")
+            # Schreibe die Hilfetext (aus print_help) an den Anfang
+            f.write("# Kommandozeilen-Hilfe\n\n")
+            f.write(print_help.__doc__)
+            f.write("\n")
 
             f.write("# Übersicht der gescannten Dateien\n\n")
             for file in self.file_list:
@@ -58,11 +60,11 @@ class FileListSaver:
             None
         """
         with open(output_file, "w") as f:
-            # Schreibe die Kommandozeilenparameter an den Anfang
+            # Schreibe die Hilfetext (aus print_help) an den Anfang
             f.write("<html><body>\n")
-            f.write("<h1>Kommandozeilenargumente</h1>\n")
-            f.write(f"<p>Projektpfad: {self.args.project_path}</p>\n")
-            f.write(f"<p>Zielverzeichnis: {self.args.target_dir}</p>\n")
+            f.write("<h1>Kommandozeilen-Hilfe</h1>\n<pre>\n")
+            f.write(print_help.__doc__)
+            f.write("</pre>\n")
 
             f.write("<h1>Übersicht der gescannten Dateien</h1>\n<ul>\n")
             for file in self.file_list:

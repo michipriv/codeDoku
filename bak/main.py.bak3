@@ -4,6 +4,7 @@ from modules.generator import OverviewGenerator
 from modules.file_list_saver import FileListSaver
 from modules.overview_saver import OverviewSaver
 from modules.args import ArgumentParser
+import os
 
 
 def create_doc_directory(target_dir):
@@ -29,7 +30,7 @@ def main():
     This function does the following:
     1. Parses command line arguments to get the project path and target directory.
     2. Generates the list of files and the project overview.
-    3. Saves the list of files and the overview in both Markdown and HTML formats.
+    3. Saves the list of files and the overview in Markdown, HTML, and JSON formats.
 
     Args:
         None
@@ -37,6 +38,7 @@ def main():
     Returns:
         None
     """
+    # Initialisiere die ArgumentParser Klasse
     arg_parser = ArgumentParser()
     args = arg_parser.parse_arguments()
 
@@ -49,15 +51,20 @@ def main():
     overview = generator.generate_overview(file_list)
 
     # Speichere die Liste der Dateien
-    file_saver = FileListSaver(file_list)
+    file_saver = FileListSaver(file_list, args)
     file_saver.save_file_list_as_md(f"{doc_dir}/file_list.md")
     file_saver.save_file_list_as_html(f"{doc_dir}/file_list.html")
 
-    # Speichere die Übersicht der Klassen und Methoden
-    overview_saver = OverviewSaver(overview, file_list)
+    # Speichere die Übersicht der Klassen, Methoden und Funktionen
+    overview_saver = OverviewSaver(overview, file_list, args)
     overview_saver.save_overview_as_md(f"{doc_dir}/overview.md")
     overview_saver.save_overview_as_html(f"{doc_dir}/overview.html")
+
+    # Speichere die Übersicht als komprimiertes JSON für die KI
+    overview_saver.save_overview_as_json(f"{doc_dir}/overview.json")
 
 
 if __name__ == "__main__":
     main()
+
+# EOF

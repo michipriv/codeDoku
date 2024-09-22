@@ -5,6 +5,7 @@ from modules.file_list_saver import FileListSaver
 from modules.overview_saver import OverviewSaver
 from modules.args import ArgumentParser
 import os
+import sys  # Neu hinzugefügt, um den Programmnamen zu ermitteln
 
 
 def create_doc_directory(target_dir):
@@ -17,9 +18,14 @@ def create_doc_directory(target_dir):
     Returns:
         str: The path to the 'doc' directory.
     """
+    if not os.path.isabs(target_dir):
+        target_dir = os.path.abspath(target_dir)
+
     doc_dir = os.path.join(target_dir, "doc")
+
     if not os.path.exists(doc_dir):
         os.makedirs(doc_dir)
+
     return doc_dir
 
 
@@ -42,6 +48,9 @@ def main():
     arg_parser = ArgumentParser()
     args = arg_parser.parse_arguments()
 
+    # Ermittel den Namen des aufgerufenen Programms
+    prog_name = os.path.basename(sys.argv[0])
+
     # Erstelle das doc-Verzeichnis im Zielverzeichnis
     doc_dir = create_doc_directory(args.target_dir)
 
@@ -51,12 +60,12 @@ def main():
     overview = generator.generate_overview(file_list)
 
     # Speichere die Liste der Dateien
-    file_saver = FileListSaver(file_list, args)
+    file_saver = FileListSaver(file_list, args, prog_name)
     file_saver.save_file_list_as_md(f"{doc_dir}/file_list.md")
     file_saver.save_file_list_as_html(f"{doc_dir}/file_list.html")
 
     # Speichere die Übersicht der Klassen, Methoden und Funktionen
-    overview_saver = OverviewSaver(overview, file_list, args)
+    overview_saver = OverviewSaver(overview, file_list, args, prog_name)
     overview_saver.save_overview_as_md(f"{doc_dir}/overview.md")
     overview_saver.save_overview_as_html(f"{doc_dir}/overview.html")
 

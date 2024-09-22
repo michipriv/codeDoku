@@ -24,7 +24,6 @@ Methods:
 
 import sys
 from modules.help import print_help
-import os
 
 
 class ArgumentParser:
@@ -60,14 +59,7 @@ class ArgumentParser:
             try:
                 self.target_dir = sys.argv[sys.argv.index("-z") + 1]
             except IndexError:
-                print(
-                    "Fehler: Kein Zielverzeichnis angegeben. Verwende das aktuelle Verzeichnis."
-                )
-                self.target_dir = os.getcwd()  # Verwende das aktuelle Verzeichnis
-        else:
-            print("Fehler: Die Option '-z' muss angegeben werden.")
-            sys.exit(1)
-
+                print("Fehler: Kein Zielverzeichnis angegeben.")
         return self
 
 

@@ -23,6 +23,7 @@ Methods:
 """
 
 import sys
+import os
 from modules.help import print_help
 
 
@@ -51,15 +52,24 @@ class ArgumentParser:
         Returns:
             ArgumentParser: Returns the current instance with updated attributes.
         """
+        prog_name = os.path.basename(sys.argv[0])  # Ermittelt den Programmnamen
+
         if "-h" in sys.argv:
-            print_help()
+            print(print_help(prog_name))  # Übergibt den Programmnamen an print_help
             sys.exit(0)  # Beende das Programm nach der Anzeige der Hilfe
 
         if "-z" in sys.argv:
             try:
                 self.target_dir = sys.argv[sys.argv.index("-z") + 1]
             except IndexError:
-                print("Fehler: Kein Zielverzeichnis angegeben.")
+                print(
+                    "Fehler: Kein Zielverzeichnis angegeben. Verwende das aktuelle Verzeichnis."
+                )
+                self.target_dir = os.getcwd()  # Verwende das aktuelle Verzeichnis
+        else:
+            print("Fehler: Die Option '-z' muss angegeben werden.")
+            sys.exit(1)
+
         return self
 
 

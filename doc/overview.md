@@ -1,22 +1,18 @@
 # Kommandozeilen-Hilfe
 
 
-    Displays a help message describing the command-line options for the program.
-
-    The message includes:
-        - Program usage
-        - Available options and their descriptions
-        - Example command invocations
-
-    The options explained include:
-        - -p: Generates the project overview and saves it in both Markdown and HTML formats.
-        - -h: Displays the help message and exits the program.
-        - -z: Specifies the output directory for saving the generated files (Markdown and HTML).
-
-    Example usage:
-        - python main.py -p
-        - python main.py -h
-        - python main.py -p -z /Path/to/TargetDirectory
+    Nutzung:
+      python main.py [-p] [-h] [-z ZIELVERZEICHNIS]
+    
+    Optionen:
+      -p    Generiert eine Projektübersicht (Klassen, Methoden, Docstrings) und speichert diese in Markdown und HTML.
+      -h    Zeigt diese Hilfemeldung an und beendet das Programm.
+      -z    Spezifiziert das Zielverzeichnis für die gespeicherten Dateien (Markdown und HTML). Standard ist das aktuelle Verzeichnis.
+    
+    Beispielaufrufe:
+      python main.py -p
+      python main.py -p -z /Pfad/zum/Zielverzeichnis
+      python main.py -h
     
 # Übersicht der gescannten Dateien
 
@@ -92,12 +88,13 @@ Returns:
     ArgumentParser: Returns the current instance with updated attributes.
 # Datei: ./modules/file_list_saver.py
   ## Klasse: FileListSaver
-    ### Methode: __init__(self, file_list, args)
-      Docstring: Initializes the FileListSaver with the list of scanned Python files and command-line arguments.
+    ### Methode: __init__(self, file_list, args, prog_name)
+      Docstring: Initializes the FileListSaver with the list of scanned Python files, command-line arguments, and program name.
 
 Args:
     file_list (list): A list of all Python files that were scanned.
     args (ArgumentParser): Parsed command-line arguments (e.g., project_path, target_dir).
+    prog_name (str): The name of the program being executed.
     ### Methode: save_file_list_as_md(self, output_file)
       Docstring: Saves the list of scanned Python files as a Markdown file.
 
@@ -114,12 +111,13 @@ Args:
 
 Returns:
     None
-  ## Funktion: __init__(self, file_list, args)
-    Docstring: Initializes the FileListSaver with the list of scanned Python files and command-line arguments.
+  ## Funktion: __init__(self, file_list, args, prog_name)
+    Docstring: Initializes the FileListSaver with the list of scanned Python files, command-line arguments, and program name.
 
 Args:
     file_list (list): A list of all Python files that were scanned.
     args (ArgumentParser): Parsed command-line arguments (e.g., project_path, target_dir).
+    prog_name (str): The name of the program being executed.
   ## Funktion: save_file_list_as_md(self, output_file)
     Docstring: Saves the list of scanned Python files as a Markdown file.
 
@@ -191,7 +189,7 @@ Args:
 Returns:
     list: A list of dictionaries containing class and method information, or function information.
 # Datei: ./modules/help.py
-  ## Funktion: print_help()
+  ## Funktion: print_help(prog_name)
     Docstring: Displays a help message describing the command-line options for the program.
 
 The message includes:
@@ -204,10 +202,13 @@ The options explained include:
     - -h: Displays the help message and exits the program.
     - -z: Specifies the output directory for saving the generated files (Markdown and HTML).
 
+Args:
+    prog_name (str): The name of the program for which the help is being generated.
+
 Example usage:
-    - python main.py -p
-    - python main.py -h
-    - python main.py -p -z /Path/to/TargetDirectory
+    - python {prog_name} -p
+    - python {prog_name} -h
+    - python {prog_name} -p -z /Path/to/TargetDirectory
 # Datei: ./modules/output.py
   ## Klasse: OutputManager
     ### Methode: __init__(self, target_dir)
@@ -301,13 +302,14 @@ Returns:
     dict: A dictionary where the keys are file paths and the values are lists of extracted class and method information.
 # Datei: ./modules/overview_saver.py
   ## Klasse: OverviewSaver
-    ### Methode: __init__(self, overview, file_list, args)
-      Docstring: Initializes the OverviewSaver with the project overview data, the list of all files, and command-line arguments.
+    ### Methode: __init__(self, overview, file_list, args, prog_name)
+      Docstring: Initializes the OverviewSaver with the project overview data, the list of all files, and program name.
 
 Args:
     overview (dict): The overview of classes, methods, and functions. Each key is a file path, and the value is a list of class and function information.
     file_list (list): The list of all Python files to ensure all are documented.
     args (ArgumentParser): Parsed command-line arguments (e.g., project_path, target_dir).
+    prog_name (str): The name of the program being executed.
     ### Methode: save_overview_as_md(self, output_file)
       Docstring: Saves the overview of classes, methods, and functions as a Markdown file.
 Files with no documentation will be indicated.
@@ -335,13 +337,14 @@ Args:
 
 Returns:
     None
-  ## Funktion: __init__(self, overview, file_list, args)
-    Docstring: Initializes the OverviewSaver with the project overview data, the list of all files, and command-line arguments.
+  ## Funktion: __init__(self, overview, file_list, args, prog_name)
+    Docstring: Initializes the OverviewSaver with the project overview data, the list of all files, and program name.
 
 Args:
     overview (dict): The overview of classes, methods, and functions. Each key is a file path, and the value is a list of class and function information.
     file_list (list): The list of all Python files to ensure all are documented.
     args (ArgumentParser): Parsed command-line arguments (e.g., project_path, target_dir).
+    prog_name (str): The name of the program being executed.
   ## Funktion: save_overview_as_md(self, output_file)
     Docstring: Saves the overview of classes, methods, and functions as a Markdown file.
 Files with no documentation will be indicated.

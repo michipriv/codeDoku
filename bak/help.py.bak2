@@ -1,4 +1,4 @@
-# Filename: modules/help.py
+#Filename: modules/help.py
 """
 print_help function to display the help message for the program.
 
@@ -8,7 +8,6 @@ Functions:
 Usage:
     Call print_help() to display the help message, typically when the user invokes the -h option.
 """
-
 
 def print_help():
     """
@@ -20,10 +19,10 @@ def print_help():
         - Example command invocations
 
     The options explained include:
-        - -p: Generates the project overview and saves it in both Markdown and HTML formats.
-        - -h: Displays the help message and exits the program.
-        - -z: Specifies the output directory for saving the generated files (Markdown and HTML).
-
+        - -p: Output in a human-readable format to the console and saves as Markdown.
+        - -h: Displays the help message and saves output as HTML.
+        - -z: Saves the output in the specified target directory. Files are created in a 'doc' subdirectory.
+    
     Example usage:
         - python main.py -p
         - python main.py -h
@@ -34,16 +33,15 @@ def print_help():
       python main.py [-p] [-h] [-z ZIELVERZEICHNIS]
     
     Optionen:
-      -p    Generiert eine Projektübersicht (Klassen, Methoden, Docstrings) und speichert diese in Markdown und HTML.
-      -h    Zeigt diese Hilfemeldung an und beendet das Programm.
-      -z    Spezifiziert das Zielverzeichnis für die gespeicherten Dateien (Markdown und HTML). Standard ist das aktuelle Verzeichnis.
+      -p    Ausgabe in menschenlesbarer Form auf der Konsole und als Markdown speichern.
+      -h    Hilfe anzeigen und Ausgabe in HTML speichern.
+      -z    Speichern der Ausgabe im angegebenen Zielverzeichnis. Die Dateien werden im Unterverzeichnis 'doc' erstellt.
     
     Beispielaufrufe:
       python main.py -p
-      python main.py -p -z /Pfad/zum/Zielverzeichnis
       python main.py -h
+      python main.py -p -z /Pfad/zum/Zielverzeichnis
     """
     print(help_text)
 
-
-# EOF
+#EOF
