@@ -23,8 +23,8 @@ Methods:
 """
 
 import sys
-from modules.help import print_help
 import os
+from modules.help import print_help
 
 
 class ArgumentParser:
@@ -36,8 +36,8 @@ class ArgumentParser:
             project_path (str): Path to the project directory, defaults to './'.
             target_dir (str): Path to the output directory, defaults to './'.
         """
-        self.project_path = "./"
-        self.target_dir = "./"
+        self.project_path = "./"  # Standardmäßig aktuelles Verzeichnis
+        self.target_dir = "./"  # Standardmäßig aktuelles Verzeichnis
 
     def parse_arguments(self):
         """
@@ -52,9 +52,18 @@ class ArgumentParser:
         Returns:
             ArgumentParser: Returns the current instance with updated attributes.
         """
+        prog_name = os.path.basename(sys.argv[0])  # Ermittelt den Programmnamen
+
         if "-h" in sys.argv:
-            print_help()
+            print(print_help(prog_name))  # Übergibt den Programmnamen an print_help
             sys.exit(0)  # Beende das Programm nach der Anzeige der Hilfe
+
+        if len(sys.argv) > 1:
+            # Das erste Argument nach dem Programmname ist der project_path
+            self.project_path = sys.argv[1]  # Setze den project_path
+            if not os.path.exists(self.project_path):
+                print(f"Fehler: Das Verzeichnis '{self.project_path}' existiert nicht.")
+                sys.exit(1)
 
         if "-z" in sys.argv:
             try:

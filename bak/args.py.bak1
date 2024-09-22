@@ -15,7 +15,7 @@ Usage:
 
 Attributes:
     - project_path (str): Path to the project directory, default is './'.
-    - target_dir (str): Path to the target directory for output, default is './'.
+    - target_dir (str): Path to the target directory, default is './'.
 
 Methods:
     - __init__(): Initializes the class with default project and target directory.
@@ -23,8 +23,8 @@ Methods:
 """
 
 import sys
-from modules.help import print_help
 import os
+from modules.help import print_help
 
 
 class ArgumentParser:
@@ -33,42 +33,54 @@ class ArgumentParser:
         Initializes the ArgumentParser with default values for project path and target directory.
 
         Attributes:
-            project_path (str): Path to the project directory, defaults to './'.
+            project_path (str): Path to the project directory.
             target_dir (str): Path to the output directory, defaults to './'.
         """
-        self.project_path = "./"
-        self.target_dir = "./"
+        self.project_path = None  # Wird durch die Option -z gesetzt
+        self.target_dir = "./"  # Standardmäßig aktuelles Verzeichnis
 
     def parse_arguments(self):
         """
         Reads command line arguments and sets the appropriate options for project and target paths.
 
-        This method looks for the '-z' argument in the command line to specify the target directory.
+        This method looks for the '-z' argument in the command line to specify the project directory.
         If '-h' is provided, the help message is displayed, and the program exits.
 
         Raises:
-            IndexError: If the '-z' argument is provided but no target directory follows it.
+            IndexError: If the '-z' argument is provided but no project directory follows it.
 
         Returns:
             ArgumentParser: Returns the current instance with updated attributes.
         """
+        prog_name = os.path.basename(sys.argv[0])  # Ermittelt den Programmnamen
+
         if "-h" in sys.argv:
-            print_help()
+            print(print_help(prog_name))  # Übergibt den Programmnamen an print_help
             sys.exit(0)  # Beende das Programm nach der Anzeige der Hilfe
 
         if "-z" in sys.argv:
             try:
-                self.target_dir = sys.argv[sys.argv.index("-z") + 1]
+                self.project_path = sys.argv[sys.argv.index("-z") + 1]
+                if not os.path.exists(self.project_path):
+                    print(
+                        f"Fehler: Das Verzeichnis '{self.project_path}' existiert nicht."
+                    )
+                    sys.exit(1)
             except IndexError:
-                print(
-                    "Fehler: Kein Zielverzeichnis angegeben. Verwende das aktuelle Verzeichnis."
-                )
-                self.target_dir = os.getcwd()  # Verwende das aktuelle Verzeichnis
+                print("Fehler: Kein Projektverzeichnis angegeben.")
+                sys.exit(1)
         else:
-            print("Fehler: Die Option '-z' muss angegeben werden.")
+            print(
+                "Fehler: Die Option '-z' muss angegeben werden, um das zu scannende Verzeichnis festzulegen."
+            )
             sys.exit(1)
 
+        # Falls ein zusätzliches Argument für das Zielverzeichnis angegeben wird, verwenden wir es
+        if len(sys.argv) > sys.argv.index("-z") + 2:
+            self.target_dir = sys.argv[sys.argv.index("-z") + 2]
+        else:
+            self.target_dir = (
+                os.getcwd()
+            )  # Verwende das aktuelle Verzeichnis als Zielverzeichnis
+
         return self
-
-
-# EOF

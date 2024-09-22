@@ -12,6 +12,7 @@ Usage:
 
 def print_help(prog_name):
     """
+    Kommandozeilen
     Displays a help message describing the command-line options for the program.
 
     The message includes:

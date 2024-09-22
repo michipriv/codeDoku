@@ -12,20 +12,25 @@ Functions:
 Attributes:
     - file_list (list): The list of all scanned Python files.
     - args (ArgumentParser): The parsed command-line arguments to include in the output files.
+    - prog_name (str): The name of the program being executed, used for dynamic help.
 """
+
+from modules.help import print_help
 
 
 class FileListSaver:
-    def __init__(self, file_list, args):
+    def __init__(self, file_list, args, prog_name):
         """
-        Initializes the FileListSaver with the list of scanned Python files and command-line arguments.
+        Initializes the FileListSaver with the list of scanned Python files, command-line arguments, and program name.
 
         Args:
             file_list (list): A list of all Python files that were scanned.
             args (ArgumentParser): Parsed command-line arguments (e.g., project_path, target_dir).
+            prog_name (str): The name of the program being executed.
         """
         self.file_list = file_list
         self.args = args
+        self.prog_name = prog_name
 
     def save_file_list_as_md(self, output_file):
         """
@@ -38,10 +43,7 @@ class FileListSaver:
             None
         """
         with open(output_file, "w") as f:
-            # Schreibe die Kommandozeilenparameter an den Anfang
-            f.write("# Kommandozeilenargumente\n")
-            f.write(f"- Projektpfad: {self.args.project_path}\n")
-            f.write(f"- Zielverzeichnis: {self.args.target_dir}\n\n")
+           
 
             f.write("# Übersicht der gescannten Dateien\n\n")
             for file in self.file_list:
@@ -58,11 +60,7 @@ class FileListSaver:
             None
         """
         with open(output_file, "w") as f:
-            # Schreibe die Kommandozeilenparameter an den Anfang
-            f.write("<html><body>\n")
-            f.write("<h1>Kommandozeilenargumente</h1>\n")
-            f.write(f"<p>Projektpfad: {self.args.project_path}</p>\n")
-            f.write(f"<p>Zielverzeichnis: {self.args.target_dir}</p>\n")
+           
 
             f.write("<h1>Übersicht der gescannten Dateien</h1>\n<ul>\n")
             for file in self.file_list:

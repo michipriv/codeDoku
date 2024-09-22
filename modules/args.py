@@ -14,12 +14,7 @@ Usage:
     args = arg_parser.parse_arguments()
 
 Attributes:
-    - project_path (str): Path to the project directory, default is './'.
-    - target_dir (str): Path to the target directory for output, default is './'.
-
-Methods:
-    - __init__(): Initializes the class with default project and target directory.
-    - parse_arguments(): Reads and processes command line arguments to set options.
+    - target_dir (str): Path to the target directory (which is scanned), must be provided via -z.
 """
 
 import sys
@@ -30,18 +25,16 @@ from modules.help import print_help
 class ArgumentParser:
     def __init__(self):
         """
-        Initializes the ArgumentParser with default values for project path and target directory.
+        Initializes the ArgumentParser with default values for the target directory.
 
         Attributes:
-            project_path (str): Path to the project directory, defaults to './'.
-            target_dir (str): Path to the output directory, defaults to './'.
+            target_dir (str): Path to the directory that will be scanned (provided via -z).
         """
-        self.project_path = "./"
-        self.target_dir = "./"
+        self.target_dir = None  # Muss durch die Option -z gesetzt werden
 
     def parse_arguments(self):
         """
-        Reads command line arguments and sets the appropriate options for project and target paths.
+        Reads command line arguments and sets the appropriate options for the target directory.
 
         This method looks for the '-z' argument in the command line to specify the target directory.
         If '-h' is provided, the help message is displayed, and the program exits.
@@ -61,16 +54,18 @@ class ArgumentParser:
         if "-z" in sys.argv:
             try:
                 self.target_dir = sys.argv[sys.argv.index("-z") + 1]
+                if not os.path.exists(self.target_dir):
+                    print(
+                        f"Fehler: Das Verzeichnis '{self.target_dir}' existiert nicht."
+                    )
+                    sys.exit(1)
             except IndexError:
-                print(
-                    "Fehler: Kein Zielverzeichnis angegeben. Verwende das aktuelle Verzeichnis."
-                )
-                self.target_dir = os.getcwd()  # Verwende das aktuelle Verzeichnis
+                print("Fehler: Kein Zielverzeichnis angegeben.")
+                sys.exit(1)
         else:
-            print("Fehler: Die Option '-z' muss angegeben werden.")
+            print(
+                "Fehler: Die Option '-z' muss angegeben werden, um das zu scannende Zielverzeichnis festzulegen."
+            )
             sys.exit(1)
 
         return self
-
-
-# EOF

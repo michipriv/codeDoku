@@ -1,19 +1,41 @@
 # Filename: modules/overview_saver.py
 
 import json  # Importiere json für die JSON-Ausgabe
+from modules.help import print_help
 
 
 class OverviewSaver:
-    def __init__(self, overview, file_list):
+    def __init__(self, overview, file_list, args, prog_name):
         """
-        Initializes the OverviewSaver with the project overview data and the list of all files.
+        Initializes the OverviewSaver with the project overview data, the list of all files, and program name.
 
         Args:
             overview (dict): The overview of classes, methods, and functions. Each key is a file path, and the value is a list of class and function information.
             file_list (list): The list of all Python files to ensure all are documented.
+            args (ArgumentParser): Parsed command-line arguments (e.g., target_dir).
+            prog_name (str): The name of the program being executed.
         """
         self.overview = overview
         self.file_list = file_list
+        self.args = args
+        self.prog_name = prog_name
+
+    def extract_command_line_help(self, docstring):
+        """
+        Extracts the command line help from a given docstring.
+
+        If the word 'Kommandozeilen' is found in the docstring, the entire docstring is used as command line help.
+        Otherwise, the function returns 'Keine Kommandozeilen gefunden'.
+
+        Args:
+            docstring (str): The docstring to search for command line options.
+
+        Returns:
+            str: The command line help or a default message.
+        """
+        if docstring and "Kommandozeilen" in docstring:
+            return docstring
+        return "Keine Kommandozeilen gefunden"
 
     def save_overview_as_md(self, output_file):
         """
@@ -46,6 +68,12 @@ class OverviewSaver:
                                 f.write(f"  ## Klasse: {item['class']}\n")
                                 if item["docstring"]:
                                     f.write(f"    Docstring: {item['docstring']}\n")
+                                    command_line_help = self.extract_command_line_help(
+                                        item["docstring"]
+                                    )
+                                    f.write(
+                                        f"    Kommandozeilen-Hilfe: {command_line_help}\n"
+                                    )
                                 for method in item["methods"]:
                                     params_str = ", ".join(method["params"])
                                     f.write(
@@ -55,6 +83,14 @@ class OverviewSaver:
                                         f.write(
                                             f"      Docstring: {method['docstring']}\n"
                                         )
+                                        command_line_help = (
+                                            self.extract_command_line_help(
+                                                method["docstring"]
+                                            )
+                                        )
+                                        f.write(
+                                            f"      Kommandozeilen-Hilfe: {command_line_help}\n"
+                                        )
                             elif "function" in item:
                                 params_str = ", ".join(item["params"])
                                 f.write(
@@ -62,6 +98,12 @@ class OverviewSaver:
                                 )
                                 if item["docstring"]:
                                     f.write(f"    Docstring: {item['docstring']}\n")
+                                    command_line_help = self.extract_command_line_help(
+                                        item["docstring"]
+                                    )
+                                    f.write(
+                                        f"    Kommandozeilen-Hilfe: {command_line_help}\n"
+                                    )
                         else:
                             f.write(f"  {item}\n")
                 else:
@@ -99,6 +141,12 @@ class OverviewSaver:
                                 f.write(f"<h4>Klasse: {item['class']}</h4>\n")
                                 if item["docstring"]:
                                     f.write(f"<p>Docstring: {item['docstring']}</p>\n")
+                                    command_line_help = self.extract_command_line_help(
+                                        item["docstring"]
+                                    )
+                                    f.write(
+                                        f"<p>Kommandozeilen-Hilfe: {command_line_help}</p>\n"
+                                    )
                                 for method in item["methods"]:
                                     params_str = ", ".join(method["params"])
                                     f.write(
@@ -108,6 +156,14 @@ class OverviewSaver:
                                         f.write(
                                             f"<p>Docstring: {method['docstring']}</p>\n"
                                         )
+                                        command_line_help = (
+                                            self.extract_command_line_help(
+                                                method["docstring"]
+                                            )
+                                        )
+                                        f.write(
+                                            f"<p>Kommandozeilen-Hilfe: {command_line_help}</p>\n"
+                                        )
                             elif "function" in item:
                                 params_str = ", ".join(item["params"])
                                 f.write(
@@ -115,6 +171,12 @@ class OverviewSaver:
                                 )
                                 if item["docstring"]:
                                     f.write(f"<p>Docstring: {item['docstring']}</p>\n")
+                                    command_line_help = self.extract_command_line_help(
+                                        item["docstring"]
+                                    )
+                                    f.write(
+                                        f"<p>Kommandozeilen-Hilfe: {command_line_help}</p>\n"
+                                    )
                         else:
                             f.write(f"<p>{item}</p>\n")
                 else:
@@ -133,7 +195,18 @@ class OverviewSaver:
         Returns:
             None
         """
-        # Bereite das reduzierte JSON vor (ohne unnötige Formatierungen)
+        # Bereite das JSON-Objekt vor, das auch die Kommandozeilenparameter enthält
+        output_data = {
+            "command_line_help": print_help(self.prog_name),
+            "command_line_arguments": {
+                "target_dir": self.args.target_dir,
+            },
+            "overview": self.overview,
+        }
+
+        # Speichere das JSON in einer komprimierten Form
         with open(output_file, "w") as f:
-            # Speichere das JSON in einer komprimierten Form (ohne Zeilenumbrüche und Leerzeichen)
-            json.dump(self.overview, f, separators=(",", ":"), ensure_ascii=False)
+            json.dump(output_data, f, separators=(",", ":"), ensure_ascii=False)
+
+
+# EOF

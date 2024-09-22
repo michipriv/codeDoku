@@ -5,7 +5,6 @@ from modules.file_list_saver import FileListSaver
 from modules.overview_saver import OverviewSaver
 from modules.args import ArgumentParser
 import os
-import sys  # Neu hinzugefügt, um den Programmnamen zu ermitteln
 
 
 def create_doc_directory(target_dir):
@@ -34,9 +33,9 @@ def main():
     Main function to handle project overview generation and output saving.
 
     This function does the following:
-    1. Parses command line arguments to get the project path and target directory.
+    1. Parses command line arguments to get the target directory.
     2. Generates the list of files and the project overview.
-    3. Saves the list of files and the overview in Markdown, HTML, and JSON formats.
+    3. Saves the list of files and the overview in the 'doc' subdirectory.
 
     Args:
         None
@@ -48,24 +47,23 @@ def main():
     arg_parser = ArgumentParser()
     args = arg_parser.parse_arguments()
 
-    # Ermittel den Namen des aufgerufenen Programms
-    prog_name = os.path.basename(sys.argv[0])
-
     # Erstelle das doc-Verzeichnis im Zielverzeichnis
     doc_dir = create_doc_directory(args.target_dir)
 
     # Generiere die Liste der Dateien und die Übersicht
-    generator = OverviewGenerator(args.project_path)
+    generator = OverviewGenerator(args.target_dir)
     file_list = generator.scan_directory()
     overview = generator.generate_overview(file_list)
 
     # Speichere die Liste der Dateien
-    file_saver = FileListSaver(file_list, args, prog_name)
+    file_saver = FileListSaver(file_list)  # Nur file_list wird übergeben
     file_saver.save_file_list_as_md(f"{doc_dir}/file_list.md")
     file_saver.save_file_list_as_html(f"{doc_dir}/file_list.html")
 
     # Speichere die Übersicht der Klassen, Methoden und Funktionen
-    overview_saver = OverviewSaver(overview, file_list, args, prog_name)
+    overview_saver = OverviewSaver(
+        overview, file_list, args, os.path.basename(__file__)
+    )
     overview_saver.save_overview_as_md(f"{doc_dir}/overview.md")
     overview_saver.save_overview_as_html(f"{doc_dir}/overview.html")
 

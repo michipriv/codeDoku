@@ -1,19 +1,44 @@
 # Kommandozeilen-Hilfe
 
+Kommandozeilen
+Displays a help message describing the command-line options for the program.
 
-    Nutzung:
-      python main.py [-p] [-h] [-z ZIELVERZEICHNIS]
-    
-    Optionen:
-      -p    Generiert eine Projektübersicht (Klassen, Methoden, Docstrings) und speichert diese in Markdown und HTML.
-      -h    Zeigt diese Hilfemeldung an und beendet das Programm.
-      -z    Spezifiziert das Zielverzeichnis für die gespeicherten Dateien (Markdown und HTML). Standard ist das aktuelle Verzeichnis.
-    
-    Beispielaufrufe:
-      python main.py -p
-      python main.py -p -z /Pfad/zum/Zielverzeichnis
-      python main.py -h
-    
+The message includes:
+    - Program usage
+    - Available options and their descriptions
+    - Example command invocations
+
+The options explained include:
+    - -p: Generates the project overview and saves it in both Markdown and HTML formats.
+    - -h: Displays the help message and exits the program.
+    - -z: Specifies the output directory for saving the generated files (Markdown and HTML).
+
+Args:
+    prog_name (str): The name of the program for which the help is being generated.
+
+Example usage:
+    - python {prog_name} -p
+    - python {prog_name} -h
+    - python {prog_name} -p -z /Path/to/TargetDirectory
+Extracts the command line help from a given docstring.
+
+If the word 'Kommandozeilen' is found in the docstring, the entire docstring is used as command line help.
+
+Args:
+    docstring (str): The docstring to search for command line options.
+
+Returns:
+    str: The command line help or an empty string if not found.
+Extracts the command line help from a given docstring.
+
+If the word 'Kommandozeilen' is found in the docstring, the entire docstring is used as command line help.
+
+Args:
+    docstring (str): The docstring to search for command line options.
+
+Returns:
+    str: The command line help or an empty string if not found.
+
 # Übersicht der gescannten Dateien
 
 - ./main.py
@@ -41,9 +66,9 @@ Returns:
     Docstring: Main function to handle project overview generation and output saving.
 
 This function does the following:
-1. Parses command line arguments to get the project path and target directory.
+1. Parses command line arguments to get the target directory.
 2. Generates the list of files and the project overview.
-3. Saves the list of files and the overview in Markdown, HTML, and JSON formats.
+3. Saves the list of files and the overview in the 'doc' subdirectory.
 
 Args:
     None
@@ -53,13 +78,12 @@ Returns:
 # Datei: ./modules/args.py
   ## Klasse: ArgumentParser
     ### Methode: __init__(self)
-      Docstring: Initializes the ArgumentParser with default values for project path and target directory.
+      Docstring: Initializes the ArgumentParser with default values for the target directory.
 
 Attributes:
-    project_path (str): Path to the project directory, defaults to './'.
-    target_dir (str): Path to the output directory, defaults to './'.
+    target_dir (str): Path to the directory that will be scanned (provided via -z).
     ### Methode: parse_arguments(self)
-      Docstring: Reads command line arguments and sets the appropriate options for project and target paths.
+      Docstring: Reads command line arguments and sets the appropriate options for the target directory.
 
 This method looks for the '-z' argument in the command line to specify the target directory.
 If '-h' is provided, the help message is displayed, and the program exits.
@@ -70,13 +94,12 @@ Raises:
 Returns:
     ArgumentParser: Returns the current instance with updated attributes.
   ## Funktion: __init__(self)
-    Docstring: Initializes the ArgumentParser with default values for project path and target directory.
+    Docstring: Initializes the ArgumentParser with default values for the target directory.
 
 Attributes:
-    project_path (str): Path to the project directory, defaults to './'.
-    target_dir (str): Path to the output directory, defaults to './'.
+    target_dir (str): Path to the directory that will be scanned (provided via -z).
   ## Funktion: parse_arguments(self)
-    Docstring: Reads command line arguments and sets the appropriate options for project and target paths.
+    Docstring: Reads command line arguments and sets the appropriate options for the target directory.
 
 This method looks for the '-z' argument in the command line to specify the target directory.
 If '-h' is provided, the help message is displayed, and the program exits.
@@ -88,13 +111,11 @@ Returns:
     ArgumentParser: Returns the current instance with updated attributes.
 # Datei: ./modules/file_list_saver.py
   ## Klasse: FileListSaver
-    ### Methode: __init__(self, file_list, args, prog_name)
-      Docstring: Initializes the FileListSaver with the list of scanned Python files, command-line arguments, and program name.
+    ### Methode: __init__(self, file_list)
+      Docstring: Initializes the FileListSaver with the list of scanned Python files.
 
 Args:
     file_list (list): A list of all Python files that were scanned.
-    args (ArgumentParser): Parsed command-line arguments (e.g., project_path, target_dir).
-    prog_name (str): The name of the program being executed.
     ### Methode: save_file_list_as_md(self, output_file)
       Docstring: Saves the list of scanned Python files as a Markdown file.
 
@@ -111,13 +132,11 @@ Args:
 
 Returns:
     None
-  ## Funktion: __init__(self, file_list, args, prog_name)
-    Docstring: Initializes the FileListSaver with the list of scanned Python files, command-line arguments, and program name.
+  ## Funktion: __init__(self, file_list)
+    Docstring: Initializes the FileListSaver with the list of scanned Python files.
 
 Args:
     file_list (list): A list of all Python files that were scanned.
-    args (ArgumentParser): Parsed command-line arguments (e.g., project_path, target_dir).
-    prog_name (str): The name of the program being executed.
   ## Funktion: save_file_list_as_md(self, output_file)
     Docstring: Saves the list of scanned Python files as a Markdown file.
 
@@ -190,7 +209,28 @@ Returns:
     list: A list of dictionaries containing class and method information, or function information.
 # Datei: ./modules/help.py
   ## Funktion: print_help(prog_name)
-    Docstring: Displays a help message describing the command-line options for the program.
+    Docstring: Kommandozeilen
+Displays a help message describing the command-line options for the program.
+
+The message includes:
+    - Program usage
+    - Available options and their descriptions
+    - Example command invocations
+
+The options explained include:
+    - -p: Generates the project overview and saves it in both Markdown and HTML formats.
+    - -h: Displays the help message and exits the program.
+    - -z: Specifies the output directory for saving the generated files (Markdown and HTML).
+
+Args:
+    prog_name (str): The name of the program for which the help is being generated.
+
+Example usage:
+    - python {prog_name} -p
+    - python {prog_name} -h
+    - python {prog_name} -p -z /Path/to/TargetDirectory
+    Kommandozeilen-Hilfe: Kommandozeilen
+Displays a help message describing the command-line options for the program.
 
 The message includes:
     - Program usage
@@ -308,11 +348,30 @@ Returns:
 Args:
     overview (dict): The overview of classes, methods, and functions. Each key is a file path, and the value is a list of class and function information.
     file_list (list): The list of all Python files to ensure all are documented.
-    args (ArgumentParser): Parsed command-line arguments (e.g., project_path, target_dir).
+    args (ArgumentParser): Parsed command-line arguments (e.g., target_dir).
     prog_name (str): The name of the program being executed.
+    ### Methode: extract_command_line_help(self, docstring)
+      Docstring: Extracts the command line help from a given docstring.
+
+If the word 'Kommandozeilen' is found in the docstring, the entire docstring is used as command line help.
+
+Args:
+    docstring (str): The docstring to search for command line options.
+
+Returns:
+    str: The command line help or an empty string if not found.
+      Kommandozeilen-Hilfe: Extracts the command line help from a given docstring.
+
+If the word 'Kommandozeilen' is found in the docstring, the entire docstring is used as command line help.
+
+Args:
+    docstring (str): The docstring to search for command line options.
+
+Returns:
+    str: The command line help or an empty string if not found.
     ### Methode: save_overview_as_md(self, output_file)
       Docstring: Saves the overview of classes, methods, and functions as a Markdown file.
-Files with no documentation will be indicated.
+The extracted command line help is added at the top if found.
 
 Args:
     output_file (str): The path to the Markdown file where the overview will be saved.
@@ -321,7 +380,7 @@ Returns:
     None
     ### Methode: save_overview_as_html(self, output_file)
       Docstring: Saves the overview of classes, methods, and functions as an HTML file.
-Files with no documentation will be indicated.
+The extracted command line help is added at the top if found.
 
 Args:
     output_file (str): The path to the HTML file where the overview will be saved.
@@ -330,24 +389,48 @@ Returns:
     None
     ### Methode: save_overview_as_json(self, output_file)
       Docstring: Saves the overview of classes, methods, and functions as a minified JSON file.
-Files with no documentation will be indicated.
+Files with no documentation will be indicated. The command line help is included at the top if found.
 
 Args:
     output_file (str): The path to the JSON file where the overview will be saved.
 
 Returns:
     None
+    ### Methode: get_overall_command_line_help(self)
+      Docstring: Aggregates the command line help from all relevant docstrings in the overview.
+
+Returns:
+    str: Aggregated command line help from all classes and functions or an empty string if not found.
   ## Funktion: __init__(self, overview, file_list, args, prog_name)
     Docstring: Initializes the OverviewSaver with the project overview data, the list of all files, and program name.
 
 Args:
     overview (dict): The overview of classes, methods, and functions. Each key is a file path, and the value is a list of class and function information.
     file_list (list): The list of all Python files to ensure all are documented.
-    args (ArgumentParser): Parsed command-line arguments (e.g., project_path, target_dir).
+    args (ArgumentParser): Parsed command-line arguments (e.g., target_dir).
     prog_name (str): The name of the program being executed.
+  ## Funktion: extract_command_line_help(self, docstring)
+    Docstring: Extracts the command line help from a given docstring.
+
+If the word 'Kommandozeilen' is found in the docstring, the entire docstring is used as command line help.
+
+Args:
+    docstring (str): The docstring to search for command line options.
+
+Returns:
+    str: The command line help or an empty string if not found.
+    Kommandozeilen-Hilfe: Extracts the command line help from a given docstring.
+
+If the word 'Kommandozeilen' is found in the docstring, the entire docstring is used as command line help.
+
+Args:
+    docstring (str): The docstring to search for command line options.
+
+Returns:
+    str: The command line help or an empty string if not found.
   ## Funktion: save_overview_as_md(self, output_file)
     Docstring: Saves the overview of classes, methods, and functions as a Markdown file.
-Files with no documentation will be indicated.
+The extracted command line help is added at the top if found.
 
 Args:
     output_file (str): The path to the Markdown file where the overview will be saved.
@@ -356,7 +439,7 @@ Returns:
     None
   ## Funktion: save_overview_as_html(self, output_file)
     Docstring: Saves the overview of classes, methods, and functions as an HTML file.
-Files with no documentation will be indicated.
+The extracted command line help is added at the top if found.
 
 Args:
     output_file (str): The path to the HTML file where the overview will be saved.
@@ -365,13 +448,18 @@ Returns:
     None
   ## Funktion: save_overview_as_json(self, output_file)
     Docstring: Saves the overview of classes, methods, and functions as a minified JSON file.
-Files with no documentation will be indicated.
+Files with no documentation will be indicated. The command line help is included at the top if found.
 
 Args:
     output_file (str): The path to the JSON file where the overview will be saved.
 
 Returns:
     None
+  ## Funktion: get_overall_command_line_help(self)
+    Docstring: Aggregates the command line help from all relevant docstrings in the overview.
+
+Returns:
+    str: Aggregated command line help from all classes and functions or an empty string if not found.
 # Datei: ./modules/save.py
   ## Funktion: save_as_md(overview, output_file)
     Docstring: Saves the overview as a human-readable Markdown file.
