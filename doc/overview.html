@@ -1,4 +1,24 @@
 <html><body>
+<h1>Kommandozeilen-Hilfe</h1>
+<pre>
+
+    Displays a help message describing the command-line options for the program.
+
+    The message includes:
+        - Program usage
+        - Available options and their descriptions
+        - Example command invocations
+
+    The options explained include:
+        - -p: Generates the project overview and saves it in both Markdown and HTML formats.
+        - -h: Displays the help message and exits the program.
+        - -z: Specifies the output directory for saving the generated files (Markdown and HTML).
+
+    Example usage:
+        - python main.py -p
+        - python main.py -h
+        - python main.py -p -z /Path/to/TargetDirectory
+    </pre>
 <h1>Übersicht der gescannten Dateien</h1>
 <ul>
 <li>./main.py</li>
@@ -72,11 +92,12 @@ Returns:
     ArgumentParser: Returns the current instance with updated attributes.</p>
 <h3>Datei: ./modules/file_list_saver.py</h3>
 <h4>Klasse: FileListSaver</h4>
-<p>Methode: __init__(self, file_list)</p>
-<p>Docstring: Initializes the FileListSaver with the list of scanned Python files.
+<p>Methode: __init__(self, file_list, args)</p>
+<p>Docstring: Initializes the FileListSaver with the list of scanned Python files and command-line arguments.
 
 Args:
-    file_list (list): A list of all Python files that were scanned.</p>
+    file_list (list): A list of all Python files that were scanned.
+    args (ArgumentParser): Parsed command-line arguments (e.g., project_path, target_dir).</p>
 <p>Methode: save_file_list_as_md(self, output_file)</p>
 <p>Docstring: Saves the list of scanned Python files as a Markdown file.
 
@@ -93,11 +114,12 @@ Args:
 
 Returns:
     None</p>
-<h4>Funktion: __init__(self, file_list)</h4>
-<p>Docstring: Initializes the FileListSaver with the list of scanned Python files.
+<h4>Funktion: __init__(self, file_list, args)</h4>
+<p>Docstring: Initializes the FileListSaver with the list of scanned Python files and command-line arguments.
 
 Args:
-    file_list (list): A list of all Python files that were scanned.</p>
+    file_list (list): A list of all Python files that were scanned.
+    args (ArgumentParser): Parsed command-line arguments (e.g., project_path, target_dir).</p>
 <h4>Funktion: save_file_list_as_md(self, output_file)</h4>
 <p>Docstring: Saves the list of scanned Python files as a Markdown file.
 
@@ -279,12 +301,13 @@ Returns:
     dict: A dictionary where the keys are file paths and the values are lists of extracted class and method information.</p>
 <h3>Datei: ./modules/overview_saver.py</h3>
 <h4>Klasse: OverviewSaver</h4>
-<p>Methode: __init__(self, overview, file_list)</p>
-<p>Docstring: Initializes the OverviewSaver with the project overview data and the list of all files.
+<p>Methode: __init__(self, overview, file_list, args)</p>
+<p>Docstring: Initializes the OverviewSaver with the project overview data, the list of all files, and command-line arguments.
 
 Args:
     overview (dict): The overview of classes, methods, and functions. Each key is a file path, and the value is a list of class and function information.
-    file_list (list): The list of all Python files to ensure all are documented.</p>
+    file_list (list): The list of all Python files to ensure all are documented.
+    args (ArgumentParser): Parsed command-line arguments (e.g., project_path, target_dir).</p>
 <p>Methode: save_overview_as_md(self, output_file)</p>
 <p>Docstring: Saves the overview of classes, methods, and functions as a Markdown file.
 Files with no documentation will be indicated.
@@ -312,12 +335,13 @@ Args:
 
 Returns:
     None</p>
-<h4>Funktion: __init__(self, overview, file_list)</h4>
-<p>Docstring: Initializes the OverviewSaver with the project overview data and the list of all files.
+<h4>Funktion: __init__(self, overview, file_list, args)</h4>
+<p>Docstring: Initializes the OverviewSaver with the project overview data, the list of all files, and command-line arguments.
 
 Args:
     overview (dict): The overview of classes, methods, and functions. Each key is a file path, and the value is a list of class and function information.
-    file_list (list): The list of all Python files to ensure all are documented.</p>
+    file_list (list): The list of all Python files to ensure all are documented.
+    args (ArgumentParser): Parsed command-line arguments (e.g., project_path, target_dir).</p>
 <h4>Funktion: save_overview_as_md(self, output_file)</h4>
 <p>Docstring: Saves the overview of classes, methods, and functions as a Markdown file.
 Files with no documentation will be indicated.

@@ -11,23 +11,18 @@ Functions:
 
 Attributes:
     - file_list (list): The list of all scanned Python files.
-    - args (ArgumentParser): The parsed command-line arguments to include in the output files.
 """
-
-from modules.help import print_help
 
 
 class FileListSaver:
-    def __init__(self, file_list, args):
+    def __init__(self, file_list):
         """
-        Initializes the FileListSaver with the list of scanned Python files and command-line arguments.
+        Initializes the FileListSaver with the list of scanned Python files.
 
         Args:
             file_list (list): A list of all Python files that were scanned.
-            args (ArgumentParser): Parsed command-line arguments (e.g., project_path, target_dir).
         """
         self.file_list = file_list
-        self.args = args
 
     def save_file_list_as_md(self, output_file):
         """
@@ -40,11 +35,6 @@ class FileListSaver:
             None
         """
         with open(output_file, "w") as f:
-            # Schreibe die Hilfetext (aus print_help) an den Anfang
-            f.write("# Kommandozeilen-Hilfe\n\n")
-            f.write(print_help.__doc__)
-            f.write("\n")
-
             f.write("# Übersicht der gescannten Dateien\n\n")
             for file in self.file_list:
                 f.write(f"- {file}\n")
@@ -60,12 +50,7 @@ class FileListSaver:
             None
         """
         with open(output_file, "w") as f:
-            # Schreibe die Hilfetext (aus print_help) an den Anfang
             f.write("<html><body>\n")
-            f.write("<h1>Kommandozeilen-Hilfe</h1>\n<pre>\n")
-            f.write(print_help.__doc__)
-            f.write("</pre>\n")
-
             f.write("<h1>Übersicht der gescannten Dateien</h1>\n<ul>\n")
             for file in self.file_list:
                 f.write(f"<li>{file}</li>\n")

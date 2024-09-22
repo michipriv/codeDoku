@@ -51,12 +51,12 @@ def main():
     overview = generator.generate_overview(file_list)
 
     # Speichere die Liste der Dateien
-    file_saver = FileListSaver(file_list)
+    file_saver = FileListSaver(file_list, args)
     file_saver.save_file_list_as_md(f"{doc_dir}/file_list.md")
     file_saver.save_file_list_as_html(f"{doc_dir}/file_list.html")
 
     # Speichere die Übersicht der Klassen, Methoden und Funktionen
-    overview_saver = OverviewSaver(overview, file_list)
+    overview_saver = OverviewSaver(overview, file_list, args)
     overview_saver.save_overview_as_md(f"{doc_dir}/overview.md")
     overview_saver.save_overview_as_html(f"{doc_dir}/overview.html")
 
@@ -66,3 +66,5 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+# EOF

@@ -1,5 +1,7 @@
 # Filename: modules/overview_saver.py
 
+import json  # Importiere json für die JSON-Ausgabe
+
 
 class OverviewSaver:
     def __init__(self, overview, file_list):
@@ -119,3 +121,19 @@ class OverviewSaver:
                     f.write("<p>Keine Dokumentation</p>\n")
 
             f.write("</body></html>")
+
+    def save_overview_as_json(self, output_file):
+        """
+        Saves the overview of classes, methods, and functions as a minified JSON file.
+        Files with no documentation will be indicated.
+
+        Args:
+            output_file (str): The path to the JSON file where the overview will be saved.
+
+        Returns:
+            None
+        """
+        # Bereite das reduzierte JSON vor (ohne unnötige Formatierungen)
+        with open(output_file, "w") as f:
+            # Speichere das JSON in einer komprimierten Form (ohne Zeilenumbrüche und Leerzeichen)
+            json.dump(self.overview, f, separators=(",", ":"), ensure_ascii=False)

@@ -1,19 +1,22 @@
 # Filename: modules/overview_saver.py
 
 import json  # Importiere json für die JSON-Ausgabe
+from modules.help import print_help
 
 
 class OverviewSaver:
-    def __init__(self, overview, file_list):
+    def __init__(self, overview, file_list, args):
         """
-        Initializes the OverviewSaver with the project overview data and the list of all files.
+        Initializes the OverviewSaver with the project overview data, the list of all files, and command-line arguments.
 
         Args:
             overview (dict): The overview of classes, methods, and functions. Each key is a file path, and the value is a list of class and function information.
             file_list (list): The list of all Python files to ensure all are documented.
+            args (ArgumentParser): Parsed command-line arguments (e.g., project_path, target_dir).
         """
         self.overview = overview
         self.file_list = file_list
+        self.args = args
 
     def save_overview_as_md(self, output_file):
         """
@@ -27,6 +30,11 @@ class OverviewSaver:
             None
         """
         with open(output_file, "w") as f:
+            # Schreibe die Hilfetext (aus print_help) an den Anfang
+            f.write("# Kommandozeilen-Hilfe\n\n")
+            f.write(print_help.__doc__)
+            f.write("\n")
+
             f.write("# Übersicht der gescannten Dateien\n\n")
 
             # Liste alle Dateien auf
@@ -79,7 +87,12 @@ class OverviewSaver:
             None
         """
         with open(output_file, "w") as f:
+            # Schreibe die Hilfetext (aus print_help) an den Anfang
             f.write("<html><body>\n")
+            f.write("<h1>Kommandozeilen-Hilfe</h1>\n<pre>\n")
+            f.write(print_help.__doc__)
+            f.write("</pre>\n")
+
             f.write("<h1>Übersicht der gescannten Dateien</h1>\n<ul>\n")
 
             # Liste aller Dateien
@@ -133,7 +146,19 @@ class OverviewSaver:
         Returns:
             None
         """
-        # Bereite das reduzierte JSON vor (ohne unnötige Formatierungen)
+        # Bereite das JSON-Objekt vor, das auch die Kommandozeilenparameter enthält
+        output_data = {
+            "command_line_help": print_help.__doc__,
+            "command_line_arguments": {
+                "project_path": self.args.project_path,
+                "target_dir": self.args.target_dir,
+            },
+            "overview": self.overview,
+        }
+
+        # Speichere das JSON in einer komprimierten Form
         with open(output_file, "w") as f:
-            # Speichere das JSON in einer komprimierten Form (ohne Zeilenumbrüche und Leerzeichen)
-            json.dump(self.overview, f, separators=(",", ":"), ensure_ascii=False)
+            json.dump(output_data, f, separators=(",", ":"), ensure_ascii=False)
+
+
+# EOF

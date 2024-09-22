@@ -1,5 +1,19 @@
 # Filename: main.py
+"""
+Main program to generate and save a project overview and file list.
 
+Imports:
+    - os: Provides file system operations.
+    - OverviewGenerator (modules.generator): Class to generate a project overview.
+    - FileListSaver (modules.file_list_saver): Class to save the list of Python files.
+    - OverviewSaver (modules.overview_saver): Class to save the project overview.
+    - ArgumentParser (modules.args): Class to parse command line arguments.
+
+Usage:
+    python main.py [-p] [-h] [-z ZIELVERZEICHNIS]
+"""
+
+import os  # Füge den Import von os hinzu
 from modules.generator import OverviewGenerator
 from modules.file_list_saver import FileListSaver
 from modules.overview_saver import OverviewSaver
@@ -37,6 +51,7 @@ def main():
     Returns:
         None
     """
+    # Initialisiere die ArgumentParser Klasse
     arg_parser = ArgumentParser()
     args = arg_parser.parse_arguments()
 
@@ -61,3 +76,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+# EOF
